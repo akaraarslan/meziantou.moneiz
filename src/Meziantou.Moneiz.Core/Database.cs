@@ -9,6 +9,15 @@ using System.Threading.Tasks;
 
 namespace Meziantou.Moneiz.Core
 {
+    [JsonSourceGenerationOptions(
+        GenerationMode = JsonSourceGenerationMode.Serialization,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+        WriteIndented = false)]
+    [JsonSerializable(typeof(Database))]
+    internal partial class MoneizJsonContext : JsonSerializerContext
+    {
+    }
+
     public sealed partial class Database
     {
         private int _deferedEventCount = 0;
@@ -57,11 +66,7 @@ namespace Meziantou.Moneiz.Core
             using (var compressedStream = new GZipStream(ms, CompressionLevel.Fastest))
             using (var writer = new Utf8JsonWriter(compressedStream))
             {
-                JsonSerializer.Serialize(writer, this, new JsonSerializerOptions
-                {
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-                    WriteIndented = false,
-                });
+                JsonSerializer.Serialize(writer, this, MoneizJsonContext.Default.Database);
             }
 
             return ms.ToArray();
@@ -98,7 +103,7 @@ namespace Meziantou.Moneiz.Core
                 using var compressedStream = new GZipStream(stream, CompressionMode.Decompress);
                 using var textReader = new StreamReader(compressedStream);
                 var json = await textReader.ReadToEndAsync();
-                db = JsonSerializer.Deserialize<Database>(json);
+                db = JsonSerializer.Deserialize<Database>(json, MoneizJsonContext.Default.Database);
             }
             else
             {

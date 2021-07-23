@@ -6,8 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Meziantou.Framework" Version="3.0.14" />
-    <PackageReference Include="Meziantou.Framework.Scheduling" Version="2.0.1" />
+    <PackageReference Include="Meziantou.Framework" Version="3.0.15" />
+    <PackageReference Include="Meziantou.Framework.Scheduling" Version="2.0.2" />
+    <PackageReference Include="System.Text.Json" Version="6.0.0-rc.1.21372.4" />
   </ItemGroup>
 
 </Project>
